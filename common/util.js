@@ -1,6 +1,9 @@
 class Util {
-  static getWebGLContext(canvas) {
-    return canvas.getContext('webgl');
+  static getWebGLContext(selector) {
+    if (typeof selector === 'string') {
+      selector = document.querySelector(selector);
+    }
+    return selector.getContext('webgl');
   }
   /**
    * 创建着色器方法，输入参数：渲染上下文，着色器类型，数据源
@@ -16,8 +19,8 @@ class Util {
     if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
       return shader;
     } else {
+      console.error(gl.getShaderInfoLog(shader));
       gl.deleteShader(shader);
-      throw new Error(gl.getShaderInfoLog(shader));
     }
   }
 

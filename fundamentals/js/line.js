@@ -14,6 +14,7 @@ class App {
     this.buffer = this.createBuffer(datas);
     this.setBackground(1, 1, 1, 1);
     this.render();
+    this.addEventListener();
   }
 
   initWebGLContext(canvas) {
@@ -85,8 +86,10 @@ class App {
     const uColor = gl.getUniformLocation(program, colorName);
     const uX = gl.getUniformLocation(program, thresholdName);
     gl.enableVertexAttribArray(aPosition);
-    gl.uniform4f(uColor, ...color);
+    gl.uniform4fv(uColor, color);
     gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+
+    const inter = d3.interpolate(-1, 1)
 
     let start;
     const update = (current) => {
@@ -94,16 +97,35 @@ class App {
       if (start === undefined) {
         start = current;
       }
-      const p = (current - start) / 1000 * 2 - 1;
-      gl.uniform1f(uX, p);
+      const t = (current - start) / 1000
+      gl.uniform1f(uX, inter(t));
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.drawArrays(gl.LINE_STRIP, 0, datas.length);
-      if (p < 1) {
+      if (t < 1) {
         requestAnimationFrame(update);
       }
     }
 
     requestAnimationFrame(update);
+  }
+
+  addEventListener() {
+    this.canvas.addEventListener('mousemove', ({ offsetX }) => {
+      const xScale = d3.scaleUtc()
+      .domain(d3.extent(datas, d => new Date(d.date)))
+      .range([-1, 1]);
+
+      const curr = xScale.invert(offsetX / this.canvas.width * 2 - 1).getTime();
+      const pre = { diff: null, index: null };
+      datas.map(d => new Date(d.date).getTime()).forEach((d, index) => {
+        const diff = Math.abs(curr - d);
+        if (!pre.diff || pre.diff > diff) {
+          pre.diff = diff;
+          pre.index = index;
+        }
+      })
+      console.log(datas[pre.index]);
+    });
   }
 }
 

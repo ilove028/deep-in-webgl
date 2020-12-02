@@ -4,9 +4,11 @@
     <meta charset="utf-8">
     <script src="../node_modules/d3/dist/d3.js"></script>
     <script src="../common/util.js"></script>
+    <style>
+    </style>
   </head>
   <body>
-    <canvas width="400" height="300"></canvas>
+    <canvas width="900" height="200"></canvas>
     <script id="vertexShader" type="glsl">
       attribute vec4 aPosition;
       void main() {
@@ -19,6 +21,6 @@
         gl_FragColor = vec4(1, 0, 0, 1);
       }
     </script>
-    <script src="./js/index.js"></script>
+    <script src="./js/line.js"></script>
   </body>
 </html>

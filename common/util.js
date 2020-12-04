@@ -42,4 +42,46 @@ class Util {
       throw new Error(gl.getProgramInfoLog(program));
     }
   }
+
+  /**
+   * 在x y z 方向平移
+   * @param {Number} tx 
+   * @param {Number} ty 
+   * @param {Number} tz 
+   */
+  static translate(tx, ty, tz) {
+    return [
+      1, 0, 0, 0,
+      0, 1, 0, 0,
+      0, 0, 1, 0,
+      tx,ty,tz,1
+    ];
+  }
+
+  /**
+   * 沿着x y z轴缩放
+   * @param {Number} sx 
+   * @param {Number} sy 
+   * @param {Number} sz 
+   */
+  static scaling(sx, sy, sz) {
+    return [
+      sx, 0,  0, 0,
+      0, sy,  0, 0,
+      0,  0, sz, 0,
+      0,  0,  0, 1
+    ];
+  }
+
+  static rotateX(degree) {
+    const radian = degree / 180 * Math.PI;
+    const s = Math.sin(radian);
+    const c = Math.cos(radian);
+    return [
+      1, 0,  0, 0,
+      0, c,  s, 0,
+      0, -s, c, 0,
+      0, 0,  0, 1
+    ];
+  }
 }

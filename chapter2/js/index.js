@@ -25,13 +25,13 @@
   const data = new Float32Array(vertices)
   const buffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-  gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
-
+  gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW);
+  let start;
   function fillBuffer(now) {
-    const raidus = now / 500 * Math.PI;
+    const raidus = (start === undefined ? (start = now) : now - start) / 500 * Math.PI;
     vertices.push(Math.cos(raidus), Math.sin(raidus));
     const data = new Float32Array(vertices);
-    gl.bufferData(gl.ARRAY_BUFFER, data, gl.STATIC_DRAW);
+    gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW);
   }
 
   function render(now) {
@@ -53,5 +53,5 @@
     requestAnimationFrame(tick);
   }
 
-  tick(0)
+  requestAnimationFrame(tick)
 })({})

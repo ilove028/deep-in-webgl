@@ -84,4 +84,18 @@ class Util {
       0, 0,  0, 1
     ];
   }
+
+  static loadImage(src) {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.src = src;
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        resolve(img);
+      }
+      img.onerror = (e) => {
+        reject(e);
+      }
+    });
+  }
 }
